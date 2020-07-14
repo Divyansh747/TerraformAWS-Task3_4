@@ -162,3 +162,16 @@ resource "aws_instance" "ec2_wordpress" {
     Name = "ec2_wordpress"
   }
 }
+
+resource "aws_instance" "ec2_mysql" {
+  ami           = "ami-0019ac6129392a0f2"
+  instance_type = "t2.micro"
+  subnet_id     = aws_subnet.privsubnet.id
+  vpc_security_group_ids = [ aws_security_group.mysqlsg.id ]
+  key_name      = "web-key"
+
+  tags = {
+    Name = "ec2_mysql"
+  }
+}
+
