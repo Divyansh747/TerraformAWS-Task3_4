@@ -34,3 +34,10 @@ resource "aws_subnet" "privsubnet" {
   }
 }
 
+resource "aws_internet_gateway" "testgw" {
+  vpc_id = "${aws_vpc.testvpc.id}"
+
+  tags = {
+    Name = "testgw"
+  }
+}
