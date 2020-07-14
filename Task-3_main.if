@@ -12,3 +12,26 @@ resource "aws_vpc" "testvpc" {
     Name = "testvpc"
   }
 }
+
+resource "aws_subnet" "pubsubnet" {
+  vpc_id     = "${aws_vpc.testvpc.id}"
+  cidr_block = "192.168.1.0/24"
+  map_public_ip_on_launch = "true"
+  availability_zone = "ap-south-1a"
+
+  tags = {
+    Name = "pubsubnet"
+  }
+}
+
+resource "aws_subnet" "privsubnet" {
+  vpc_id     = "${aws_vpc.testvpc.id}"
+  cidr_block = "192.168.2.0/24"
+  availability_zone = "ap-south-1b"
+
+  tags = {
+    Name = "privsubnet"
+  }
+}
+
+
