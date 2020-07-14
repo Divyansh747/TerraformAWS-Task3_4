@@ -91,3 +91,61 @@ resource "aws_route_table_association" "priva" {
   subnet_id      = aws_subnet.privsubnet.id
   route_table_id = aws_route_table.privroute.id
 }
+
+resource "aws_security_group" "testsg" {
+  name        = "allow_http_ssh"
+  description = "Allow HTTP SSH traffic"
+  vpc_id      = "${aws_vpc.testvpc.id}"
+
+  ingress {
+    description = "HTTP from VPC"
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  ingress {
+    description = "SSH from VPC"
+    from_port   = 22
+    to_port     = 22
+    protocol    = "tcp"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "testsg"
+  }
+}
+
+resource "aws_security_group" "mysqlsg" {
+  name        = "allow_mysql"
+  description = "Allow ssh and mysql inbound traffic"
+  vpc_id      = "${aws_vpc.testvpc.id}"
+
+  ingress {
+    description = "MYSQL from VPC"
+    from_port   = 3306
+    to_port     = 3306
+    protocol    = "tcp"
+    security_groups = [aws_security_group.testsg.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = {
+    Name = "allow_mysql"
+  }
+}
