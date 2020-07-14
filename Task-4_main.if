@@ -73,3 +73,21 @@ resource "aws_nat_gateway" "test-nat" {
     Name = "test NAT"
   }
 }
+
+resource "aws_route_table" "privroute" {
+  vpc_id = "${aws_vpc.testvpc.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_nat_gateway.test-nat.id}"
+  }
+
+  tags = {
+    Name = "privroute"
+  }
+}
+
+resource "aws_route_table_association" "priva" {
+  subnet_id      = aws_subnet.privsubnet.id
+  route_table_id = aws_route_table.privroute.id
+}
