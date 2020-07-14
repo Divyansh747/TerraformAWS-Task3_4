@@ -63,3 +63,13 @@ resource "aws_route_table_association" "testa" {
 resource "aws_eip" "testeip" {
   vpc = true
 }
+
+resource "aws_nat_gateway" "test-nat" {
+  allocation_id = "${aws_eip.testeip.id}"
+  subnet_id     = "${aws_subnet.pubsubnet.id}"
+  depends_on    = [aws_internet_gateway.testgw]
+
+  tags = {
+    Name = "test NAT"
+  }
+}
