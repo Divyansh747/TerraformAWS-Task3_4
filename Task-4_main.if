@@ -41,3 +41,21 @@ resource "aws_internet_gateway" "testgw" {
     Name = "testgw"
   }
 }
+
+resource "aws_route_table" "testroute" {
+  vpc_id = "${aws_vpc.testvpc.id}"
+
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = "${aws_internet_gateway.testgw.id}"
+  }
+
+  tags = {
+    Name = "testroute"
+  }
+}
+
+resource "aws_route_table_association" "testa" {
+  subnet_id      = aws_subnet.pubsubnet.id
+  route_table_id = aws_route_table.testroute.id
+}
