@@ -59,3 +59,7 @@ resource "aws_route_table_association" "testa" {
   subnet_id      = aws_subnet.pubsubnet.id
   route_table_id = aws_route_table.testroute.id
 }
+
+resource "aws_eip" "testeip" {
+  vpc = true
+}
